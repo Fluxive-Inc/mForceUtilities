@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mForce Splash Gallery</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            color: #888;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #444;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-header {
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-name {
+            font-size: 0.8rem;
+            color: #aaa;
+            font-family: monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .open-link {
+            font-size: 0.7rem;
+            color: #4daafc;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+            /* Zoom out content to fit more */
+            transform-origin: 0 0;
+        }
+
+        /* Overlay to prevent interactions in preview if needed, 
+           but for splashes interaction (hover) is nice. */
+    </style>
+</head>
+
+<body>
+
+
+
+    <h1>MFORCE SPLASH GALLERY</h1>
+
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        const files = [
+            "SafeGuard Splash.html",
+            "mForceAcademy Splash.html",
+            "mForceBridge Splash.html",
+            "mForceContext Splash.html",
+            "mForceDesign Splash.html",
+            "mForceEDGEs Splash.html",
+            "mForceFlux-Ragone Splash.html",
+            "mForceFlux-SES Splash.html",
+            "mForceFluxBot Splash.html",
+            "mForceForeman Splash.html",
+            "mForceForge Splash.html",
+            "mForceFoundry Splash.html",
+            "mForceFunds Splash.html",
+            "mForceILE Splash.html",
+            "mForceIdentity Splash.html",
+            "mForceInflux Splash.html",
+            "mForceLaunch Splash.html",
+            "mForceLibrary Splash.html",
+            "mForceMODs Splash.html",
+            "mForceOS Splash.html",
+            "mForcePROMOs Splash.html",
+            "mForcePulse Splash.html",
+            "mForceStudio Splash.html",
+            "mForceTV Splash.html",
+            "mForceTasks Splash.html",
+            "mForceTerminal Splash.html",
+            "mForceUtilities Splash.html",
+            "mForceWebsite Splash.html"
+        ];
+
+        const gallery = document.getElementById('gallery');
+
+        files.forEach(file => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            // Scaling iframe content to look like a thumbnail
+            // Note: transformation is tricky in simple grid, usually css 'zoom' or transform on body inside iframe is better.
+            // For now we just load it. scale(0.5) might act weird with layout.
+            // Let's just load it 100% size but small window.
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="file-name">${file.replace(' Splash.html', '')}</span>
+                    <a href="${encodeURIComponent(file)}" class="open-link" target="_blank">OPEN ↗</a>
+                </div>
+                <div style="flex:1; position:relative; overflow:hidden;">
+                    <iframe src="${encodeURIComponent(file)}" style="width: 200%; height: 200%; transform: scale(0.5); transform-origin: 0 0;"></iframe>
+                </div>
+            `;
+            gallery.appendChild(card);
+        });
+    </script>
+</body>
+
+</html>

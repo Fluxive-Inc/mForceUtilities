@@ -1,0 +1,22 @@
+{
+  "common_files": [
+    "auth.py",
+    "version.json",
+    "setup.py",
+    "fluxive machineforce.md",
+    "mForce.sh",
+    "VERSION_PROTOCOL.md",
+    "package.json"
+  ],
+  "excluded_directories": [
+    "mForceMODs",
+    "node_modules",
+    ".git"
+  ],
+  "project_mapping": {
+    "mForceLaunch": "PROJECT-ID-PLACEHOLDER",
+    "mForceBridge": "PROJECT-ID-PLACEHOLDER"
+  },
+  "youtrack_url": "https://tasks.fluxive.ai",
+  "youtrack_token": "YOUR_PERMANENT_TOKEN"
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mForce Module Harness</title>
+    <style>
+        body { margin: 0; padding: 0; background: #1e1e1e; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
+        #header { padding: 10px 20px; background: #252526; border-bottom: 1px solid #333; }
+        #dev-root { flex: 1; position: relative; }
+    </style>
+</head>
+<body>
+    <div id="header">mForce Investigator - Dev Harness</div>
+    <div id="dev-root"></div>
+
+    <script type="module">
+        // In a real build, we'd bundle this or import from src. 
+        // For simple local dev without a dev server that supports ESM resolution for the adapter, 
+        // we might need webpack-dev-server. 
+        // However, based on instructions, we are simulating the harness. 
+        // We will assume the bundle is built or use direct import if supported.
+        
+        // Since we are using webpack, we should probably output a dev bundle or use webpack-dev-server.
+        // For simplicity and strict adherence to the todo.md which implies a simple html file:
+        
+        // "Ensure npm start (or your dev server) loads this HTML file"
+        
+        import Module from '../adapter/index.js';
+        
+        const mockContext = { 
+            user: 'DevUser', 
+            theme: 'dark',
+            api: {
+                getToken: () => 'mock-token'
+            }
+        };
+        
+        console.log("Mounting module to harness...");
+        Module.mount(document.getElementById('dev-root'), mockContext);
+    </script>
+</body>
+</html>

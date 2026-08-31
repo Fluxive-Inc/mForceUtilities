@@ -1,0 +1,14 @@
+streamlit
+llama-index
+llama-index-llms-gemini
+llama-index-embeddings-huggingface
+llama-index-readers-web
+pandas
+nbconvert
+pypdf
+docx2txt
+python-pptx
+git+https://github.com/openai/whisper.git
+pydub
+openpyxl
+python-dotenv

@@ -1,0 +1,15 @@
+{
+    "mcpServers": {
+        "youtrack": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@jetbrains/youtrack-mcp-server",
+                "--url",
+                "https://tasks.fluxive.ai",
+                "--token",
+                "<YOUR_PERMANENT_TOKEN>"
+            ]
+        }
+    }
+}

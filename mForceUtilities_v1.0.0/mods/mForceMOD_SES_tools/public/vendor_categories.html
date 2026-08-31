@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Category Viewer</title>
+    <style>
+        :root {
+            --primary-color: #2c974b;
+            --bg-color: #f6f8fa;
+            --text-color: #24292f;
+            --border-color: #d0d7de;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            box-sizing: border-box;
+        }
+
+        .file-input-wrapper {
+            flex: 1;
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f6f8fa;
+            font-weight: 600;
+            color: #57606a;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #f6f8fa;
+        }
+
+        .account-name {
+            font-weight: 600;
+            color: #0969da;
+            width: 30%;
+        }
+
+        .categories {
+            color: #57606a;
+        }
+
+        .pill {
+            display: inline-block;
+            background-color: #eff3f6;
+            /* Light gray pill */
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            border-radius: 2em;
+            padding: 2px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            margin: 2px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Vendor Component Viewer</h1>
+        <p>Upload your "Vendor Categories" CSV to analyze groupings.</p>
+    </header>
+
+    <div class="controls">
+        <div class="file-input-wrapper">
+            <input type="file" id="csvInput" accept=".csv">
+        </div>
+        <input type="text" id="searchInput" class="search-box" placeholder="Filter by Account Name or Categories...">
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Account Name (Vendor)</th>
+                    <th>Full Names / Categories (Unique)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr>
+                    <td colspan="2" style="text-align: center; color: #57606a; padding: 30px;">
+                        Waiting for file upload...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const csvInput = document.getElementById('csvInput');
+        const searchInput = document.getElementById('searchInput');
+        let processedData = [];
+
+        csvInput.addEventListener('change', handleFileUpload);
+        searchInput.addEventListener('input', handleSearch);
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result;
+                processCSV(text);
+            };
+            reader.readAsText(file);
+        }
+
+        function processCSV(text) {
+            const lines = text.split('\n');
+            const groups = [];
+            let currentGroup = null;
+
+            // Simple CSV Line Splitter handling quotes
+            const splitCSVLine = (line) => {
+                const result = [];
+                let current = '';
+                let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(current);
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                result.push(current);
+                return result.map(s => s.trim().replace(/^"|"$/g, '').trim());
+            };
+
+            // Start processing. Skip first few lines if needed/detect headers.
+            // Based on analysis: Lines starting with a comma are data. Lines starting with text are Headers.
+            // Line 5 is header row: ",Account name, ...".
+
+            let passedMainHeader = false;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                // Skip empty lines
+                if (!line) continue;
+                // Skip comma-only lines
+                if (line.replace(/,/g, '').trim() === '') continue;
+
+                const row = splitCSVLine(line);
+
+                // Identify the main header row
+                if (!passedMainHeader) {
+                    if (row[1] === 'Account name' && row[4] === 'Full name') {
+                        passedMainHeader = true;
+                    }
+                    continue;
+                }
+
+                // Logic:
+                // Row has leading comma -> Data row (col 0 empty)
+                // Row has Text in col 0 -> Group Header
+
+                if (row[0] && row[0].length > 0) {
+                    // New Group
+                    currentGroup = {
+                        accountName: row[0],
+                        fullNames: new Set()
+                    };
+                    groups.push(currentGroup);
+                } else if (currentGroup) {
+                    // Data Row for current group
+                    // Full Name is at index 4 (0-based) based on ",Account name,Date,Memo,Full name"
+                    // Wait, row split:
+                    // If line starts with comma: ",Col1,Col2..."
+                    // splitCSVLine will give: ["", "Col1", "Col2", ...]
+                    // So Index 4 is indeed "Full name"
+
+                    if (row.length > 4 && row[4]) {
+                        // Clean up: remove "Cash-ATC-PC Operating Account" if it's generic?
+                        // User said: "summary of Full Names with no duplication"
+                        // I'll keep everything for now.
+                        currentGroup.fullNames.add(row[4]);
+                    }
+                }
+            }
+
+            // Convert Sets to Arrays for display
+            processedData = groups.map(g => ({
+                name: g.accountName,
+                categories: Array.from(g.fullNames).sort()
+            }));
+
+            renderTable(processedData);
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;">No data found.</td></tr>';
+                return;
+            }
+
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+
+                const nameTd = document.createElement('td');
+                nameTd.className = 'account-name';
+                nameTd.textContent = item.name;
+
+                const catsTd = document.createElement('td');
+                catsTd.className = 'categories';
+
+                // Render as pills
+                item.categories.forEach(cat => {
+                    if (!cat) return;
+                    const pill = document.createElement('span');
+                    pill.className = 'pill';
+                    pill.textContent = cat;
+                    catsTd.appendChild(pill);
+                });
+
+                tr.appendChild(nameTd);
+                tr.appendChild(catsTd);
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleSearch() {
+            const term = searchInput.value.toLowerCase();
+            const filtered = processedData.filter(item => {
+                const nameMatch = item.name.toLowerCase().includes(term);
+                const catMatch = item.categories.some(c => c.toLowerCase().includes(term));
+                return nameMatch || catMatch;
+            });
+            renderTable(filtered);
+        }
+    </script>
+</body>
+
+</html>

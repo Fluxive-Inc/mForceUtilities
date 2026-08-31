@@ -1,0 +1,2 @@
+[console_scripts]
+pdf-agent = pdf_agent:main

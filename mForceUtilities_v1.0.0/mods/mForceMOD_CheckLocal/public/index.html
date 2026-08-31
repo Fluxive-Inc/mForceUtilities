@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fxSpy - System Auditor</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <h1>fxSpy</h1>
+                <div class="status-badge">Agent Active</div>
+            </div>
+
+            <nav class="nav-menu">
+
+                <div class="nav-category">SYSTEM AUDIT BOT</div>
+
+                <button class="nav-btn active" data-tab="files">
+                    <span class="icon">🔍</span> System Scan
+                </button>
+                <button class="nav-btn" data-tab="network">
+                    <span class="icon">🌐</span> Network
+                </button>
+                <button class="nav-btn" data-tab="clean">
+                    <span class="icon">🧹</span> Sanitize
+                </button>
+                <button class="nav-btn" data-tab="settings">
+                    <span class="icon">⚙️</span> Settings
+                </button>
+
+                <div class="nav-category" style="margin-top:20px">SLACK BOT</div>
+
+                <button class="nav-btn" data-tab="slack-placeholder" style="opacity:0.5; cursor:not-allowed">
+                    <span class="icon">🤖</span> Coming Soon
+                </button>
+
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- INFO HEADER -->
+            <header class="top-bar">
+                <h2 id="page-title">System Audit</h2>
+                <div class="actions" style="display:flex; gap:10px">
+                    <button id="research-btn" class="primary-btn" style="background:var(--accent-green); display:none">✨
+                        Research with Gemini</button>
+                    <button id="action-btn" class="primary-btn">Scan System</button>
+                </div>
+            </header>
+
+            <!-- MODAL DETAIL VIEW -->
+            <div id="detail-modal" class="modal-overlay hidden">
+                <div class="modal-card">
+                    <button class="close-btn" onclick="closeModal()">×</button>
+                    <div id="modal-content">
+                        <!-- Dynamic Content -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS VIEW -->
+            <div id="settings-view" class="view-section">
+                <div class="settings-card">
+                    <h3>Configure Knowledge Base</h3>
+                    <p>To analyze system files with AI, please provide a Google Gemini API Key.</p>
+                    <input type="password" id="api-key-input" placeholder="Paste your Gemini API Key here" />
+                    <button id="save-key-btn" class="primary-btn">Save API Key</button>
+                    <p id="key-status" class="status-text"></p>
+                    <p style="font-size:11px; margin-top:20px; opacity:0.6">Keys are stored locally in ~/.fxspy_key</p>
+                </div>
+            </div>
+
+            <!-- VIEWS -->
+            <div id="files-view" class="view-section active">
+
+                <!-- METRICS ROW -->
+                <div class="metrics-row">
+                    <div class="metric-card">
+                        <div class="metric-value" id="stats-locations">0</div>
+                        <div class="metric-label">Locations Scanned</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="stats-files">0</div>
+                        <div class="metric-label">Total Agents Found</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="stats-system">0</div>
+                        <div class="metric-label">System Daemons</div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name / Location</th>
+                                <th>Executes</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="files-list">
+                            <!-- JS Items -->
+                        </tbody>
+                    </table>
+                    <div id="files-loader" class="loader hidden">Scanning...</div>
+                </div>
+            </div>
+
+            <div id="network-view" class="view-section">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Process</th>
+                                <th>Connection</th>
+                                <th>Remote Host</th>
+                            </tr>
+                        </thead>
+                        <tbody id="network-list">
+                            <!-- JS Items -->
+                        </tbody>
+                    </table>
+                    <div id="network-loader" class="loader hidden">Analyzing Traffic...</div>
+                </div>
+            </div>
+
+            <div id="clean-view" class="view-section">
+                <div class="clean-card">
+                    <div class="icon-large">🗑️</div>
+                    <h3>Sanitize User Data</h3>
+                    <p>Clean local user logs and caches. System integrity logs are protected by SIP and cannot be
+                        removed.</p>
+                    <button id="clean-btn" class="danger-btn">Clean Logs & Caches</button>
+                    <p id="clean-status" class="status-text"></p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

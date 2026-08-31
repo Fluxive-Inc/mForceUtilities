@@ -1,0 +1,107 @@
+# IDE & OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.log
+
+# Dependencies
+node_modules/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Local Env
+.env
+.env.local
+
+# Documentation / Non-Runtime Content
+*.md
+!mForceOS1.md
+!README.md
+mods/mForceMOD_Investigator/src/core/storage/
+mods/mForceMOD_Investigator/.git_backup/
+mods/mForceMOD_TextToAudio/audiobook_output/
+mods/mForceMOD_TextToAudio/final_packaged_audiobook/
+mods/mForceMOD_TextToAudio/ffmpeg
+
+# archived one-time/non-runtime files (local only)
+_archive/
+
+# fleet tooling (local)
+mForce.sh
+
+# ══ Machineforce fleet standard — managed by mForceOS1.sh sync (do not edit below) ══
+node_modules/
+**/node_modules/
+dist/
+build/
+**/build/
+build/web/
+.dart_tool/
+**/.dart_tool/
+.fuse_hidden*
+**/.fuse_hidden*
+.DS_Store
+# ── secrets: NEVER commit (examples are fine) ──
+.env
+.env.*
+!.env.example
+*-key.json
+sa-key*.json
+credentials.json
+service-account*.json
+# ── stray/nested git + cloud config ──
+.git_backup/
+**/.git_backup/
+.gcloud_config/
+**/.gcloud_config/
+# ── backups / dead / scratch ──
+*.bak
+*.bak.*
+*.bak_*
+_bak/
+**/_bak/
+*.old
+*.orig
+*.disabled
+*.DEAD*
+*~
+*.swp
+*.tmp
+*.pre-uniform
+*.pre-*
+# ── logs ──
+*.log
+**/logs/
+# ── local dev tooling (vendored by `mForceOS1.sh sync`; not service code) ──
+mForce.sh
+_setup/
+_archive/
+# ══ end fleet standard ══
+/mForceUtilities_v1.0.0/mods/mForceMOD_Investigator/src/core/storage/1/docstore.json
+/mForceUtilities_v1.0.0/mods/mForceMOD_Investigator/src/core/storage/1/default__vector_store.json
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/ffmpeg
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/audiobook_output/Chapter_3.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/audiobook_output/Chapter_2.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/audiobook_output/Chapter_1.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/audiobook_output/Chapter_5.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/audiobook_output/Chapter_4.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/final_packaged_audiobook/Chapter 5 - Fluxive Leadership.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/final_packaged_audiobook/Chapter 3 - Elevating Organizational Intelligence.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/final_packaged_audiobook/Chapter 1 - Crafting Tomorrow.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/final_packaged_audiobook/Chapter 4 - Harnessing AIs Invisible Power.mp3
+/mForceUtilities_v1.0.0/mods/mForceMOD_TextToAudio/final_packaged_audiobook/Chapter 2 - Analytical Maturity.mp3
+*vector_store*.json
+docstore.json
+test_output.json
+out.json
+*.mp3
+*.wav
+*.mp4
+**/audiobook_output/
+**/final_packaged_audiobook/
+**/core/storage/
+**/ffmpeg
+_logs/

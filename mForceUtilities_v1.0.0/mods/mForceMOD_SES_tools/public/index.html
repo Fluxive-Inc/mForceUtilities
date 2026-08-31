@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Viewer & Reconciler</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --border-color: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --accent-color: #58a6ff;
+            --accent-hover: #1f6feb;
+            --danger-color: #f85149;
+            --success-color: #238636;
+            --warning-color: #d29922;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .metadata {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            gap: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        button {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--border-color);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .accent-btn {
+            background-color: var(--success-color);
+            border-color: rgba(240, 246, 252, 0.1);
+            color: white;
+            font-weight: 500;
+        }
+
+        .accent-btn:hover:not(:disabled) {
+            background-color: #2ea043;
+        }
+
+        .qb-btn {
+            background-color: #2CA01C;
+            /* QB Green */
+            color: white;
+            border-color: #2CA01C;
+        }
+
+        .qb-btn:hover:not(:disabled) {
+            background-color: #108000;
+        }
+
+        /* Customer Select */
+        .customer-select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            min-width: 200px;
+        }
+
+        /* Table Container */
+        .table-container {
+            flex: 1;
+            overflow: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--surface-color);
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background-color: var(--surface-color);
+            z-index: 10;
+        }
+
+        th,
+        td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            user-select: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        th:hover {
+            color: var(--text-primary);
+        }
+
+        /* Filter Row */
+        .filter-row th {
+            padding: 5px 15px 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+
+        /* Status Pills */
+        .status-pill {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-match {
+            background-color: rgba(35, 134, 54, 0.2);
+            color: #7ee787;
+            border: 1px solid rgba(35, 134, 54, 0.5);
+        }
+
+        .status-potential {
+            background-color: rgba(210, 153, 34, 0.2);
+            color: #d29922;
+            border: 1px solid rgba(210, 153, 34, 0.5);
+        }
+
+        .status-nomatch {
+            background-color: rgba(248, 81, 73, 0.2);
+            color: #ff7b72;
+            border: 1px solid rgba(248, 81, 73, 0.5);
+        }
+
+        .status-pending {
+            background-color: rgba(56, 139, 253, 0.15);
+            color: #58a6ff;
+            border: 1px solid rgba(56, 139, 253, 0.4);
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>Transaction Reconciler</h1>
+            <div class="metadata" id="metadata-display">Loading...</div>
+        </div>
+        <div class="controls">
+            <!-- Customer Dropdown -->
+            <select id="customer-select" class="customer-select hidden">
+                <option value="">Select Customer...</option>
+            </select>
+
+            <span id="connection-status" style="color: var(--text-secondary); font-size: 0.8em;">Disconnected</span>
+
+            <input type="file" id="file-upload" accept=".csv" class="hidden">
+            <button onclick="window.location.href='vendor_categories.html'">Vendor Viewer</button>
+            <button onclick="document.getElementById('file-upload').click()">Append CSV Data</button>
+
+            <button class="qb-btn" id="btn-connect" onclick="connectQB()">Connect to QuickBooks</button>
+            <button class="accent-btn" id="btn-sync" onclick="syncQB()" disabled>Sync & Match</button>
+            <button onclick="resetFilters()">Reset Filters</button>
+        </div>
+    </header>
+
+    <div class="table-container">
+        <table id="data-table">
+            <thead>
+                <tr id="header-row"></tr>
+                <tr id="filter-row" class="filter-row"></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+
+</html>

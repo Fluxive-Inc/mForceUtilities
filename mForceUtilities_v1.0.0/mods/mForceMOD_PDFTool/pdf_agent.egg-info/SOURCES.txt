@@ -1,0 +1,9 @@
+README.md
+pdf_agent.py
+pyproject.toml
+pdf_agent.egg-info/PKG-INFO
+pdf_agent.egg-info/SOURCES.txt
+pdf_agent.egg-info/dependency_links.txt
+pdf_agent.egg-info/entry_points.txt
+pdf_agent.egg-info/requires.txt
+pdf_agent.egg-info/top_level.txt

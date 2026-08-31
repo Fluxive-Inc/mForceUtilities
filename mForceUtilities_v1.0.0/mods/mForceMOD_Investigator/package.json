@@ -1,0 +1,23 @@
+{
+    "name": "mforce-investigator",
+    "version": "1.0.0",
+    "description": "mForce Investigator Module packaging.",
+    "scripts": {
+        "build": "webpack",
+        "package": "node build-module.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "adm-zip": "^0.5.10"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.6",
+        "@babel/preset-env": "^7.28.6",
+        "babel-loader": "^10.0.0",
+        "css-loader": "^7.1.2",
+        "jszip": "^3.10.1",
+        "style-loader": "^4.0.0",
+        "webpack": "^5.104.1",
+        "webpack-cli": "^6.0.1"
+    }
+}

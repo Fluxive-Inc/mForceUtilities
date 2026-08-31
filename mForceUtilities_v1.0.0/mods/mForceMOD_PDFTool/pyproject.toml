@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf_agent"
+version = "0.1.0"
+description = "A PDF QA Agent using Google Gemini"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "langchain",
+    "langchain-community",
+    "langchain-google-genai",
+    "pypdf",
+    "faiss-cpu",
+    "python-dotenv",
+    "langchain-text-splitters",
+    "google-generativeai"
+]
+
+[tool.setuptools]
+py-modules = ["pdf_agent"]
+
+[project.scripts]
+pdf-agent = "pdf_agent:main"

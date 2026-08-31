@@ -1,0 +1,15 @@
+{
+    "id": "antigravity.mforce-investigator",
+    "name": "mForce Investigator",
+    "version": "1.0.0",
+    "main": "dist/bundle.js",
+    "type": "module",
+    "permissions": [
+        "network",
+        "filesystem"
+    ],
+    "ui": {
+        "defaultWidth": 1200,
+        "defaultHeight": 800
+    }
+}

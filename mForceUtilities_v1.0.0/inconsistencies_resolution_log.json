@@ -1,0 +1,44 @@
+[
+    {
+        "Item": "Directory mForceStudio2",
+        "Definition in Doc": "Referenced as User IDE (v2)",
+        "Actual File System": "Not Found",
+        "Action Taken": "Removed from fluxive machineforce.md",
+        "Status": "RESOLVED"
+    },
+    {
+        "Item": "Directory luxiveOS",
+        "Definition in Doc": "Typo in directory tree",
+        "Actual File System": "fluxiveOS",
+        "Action Taken": "Fixed typo in fluxive machineforce.md",
+        "Status": "RESOLVED"
+    },
+    {
+        "Item": "Availability of Architecture Doc",
+        "Definition in Doc": "Root of fluxiveOS",
+        "Actual File System": "Missing elsewhere",
+        "Action Taken": "Propagated to all core mForce directories",
+        "Status": "RESOLVED"
+    },
+    {
+        "Item": "mForce.sh Standardization",
+        "Definition in Doc": "Diverse Headers",
+        "Actual File System": "Standardized Header",
+        "Action Taken": "Updated header to 'FluxiveOS Deployment Protocol - Component: <Project>'",
+        "Status": "PARTIALLY RESOLVED (Headers matched, logic distinct)"
+    },
+    {
+        "Item": "version.json Standardization",
+        "Definition in Doc": "N/A",
+        "Actual File System": "Missing in many",
+        "Action Taken": "SKIPPED (Awaiting Golden Copy)",
+        "Status": "SKIPPED per User Request"
+    },
+    {
+        "Item": "package.json Standardization",
+        "Definition in Doc": "N/A",
+        "Actual File System": "Divergent",
+        "Action Taken": "SKIPPED",
+        "Status": "SKIPPED per User Request"
+    }
+]
