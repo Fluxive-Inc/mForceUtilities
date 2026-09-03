@@ -3,6 +3,7 @@
     "express": "^4.19.2",
     "cookie-parser": "^1.4.6",
     "pg": "^8.13.1",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "firebase-admin": "^13.0.0"
   }
 }
