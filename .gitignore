@@ -105,3 +105,14 @@ out.json
 **/core/storage/
 **/ffmpeg
 _logs/
+
+# backups / editor artifacts — never deploy (only runtime contents ship)
+*.pre_*
+*.bak
+*.bak.*
+*.bak_*
+*.auditbak
+*.orig-bak
+
+# flutter-generated (machine-specific absolute paths) — never commit
+**/flutter_export_environment.sh
