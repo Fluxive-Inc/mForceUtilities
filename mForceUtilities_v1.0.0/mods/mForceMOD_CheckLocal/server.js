@@ -10,8 +10,21 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+// AUDIT (G1): this is a LOCAL tool (scans local files/network, key in ~/.fxspy_key).
+// Lock the wide-open cors() so a website you visit can't drive localhost via your
+// browser, and fail CLOSED if this is ever served from a public host. Local use
+// (localhost/127.0.0.1) is unaffected. (SEC-MOD-GATE)
+app.use(cors({ origin: false }));           // same-origin only — no cross-origin browser access
 app.use(express.json());
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api/') || req.path === '/api/health') return next();
+  const h = String(req.hostname || '');
+  const isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+  if (isLocal) return next();                // local desktop tool — allow
+  const key = process.env.MFORCE_API_KEY;
+  if (key && req.get('X-MForce-Auth') === key) return next();  // service call on a public host
+  return res.status(401).json({ error: 'unauthorized', code: 'LOCAL_TOOL_PUBLIC' });
+});
 app.use(express.static('public'));
 
 // Local key storage (in-memory for session, or simple file for persistence)

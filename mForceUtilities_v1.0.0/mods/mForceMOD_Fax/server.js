@@ -17,8 +17,19 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+// AUDIT (G1): lock wide-open cors() to same-origin, and fail CLOSED if served from a
+// public host (its own UI is same-origin, so this is non-breaking). (SEC-MOD-GATE)
+app.use(cors({ origin: false }));
 app.use(express.json());
+app.use((req, res, next) => {
+  if (!req.path.startsWith('/api/') || req.path === '/api/health') return next();
+  const h = String(req.hostname || '');
+  const isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+  if (isLocal) return next();
+  const key = process.env.MFORCE_API_KEY;
+  if (key && req.get('X-MForce-Auth') === key) return next();
+  return res.status(401).json({ error: 'unauthorized', code: 'LOCAL_TOOL_PUBLIC' });
+});
 
 // File Upload Configuration (Memory Storage for forwarding)
 const storage = multer.memoryStorage();

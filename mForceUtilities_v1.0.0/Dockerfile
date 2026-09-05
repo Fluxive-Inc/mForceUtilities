@@ -1,6 +1,7 @@
 # Flutter/Node Perimeter Stage
 FROM node:20-alpine
 WORKDIR /app
+COPY errlog-console.js ./
 COPY package*.json ./
 RUN npm install --production
 # db.js MUST be here: server.js does require('./db') on line 3, so without it

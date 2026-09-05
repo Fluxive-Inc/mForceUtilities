@@ -1,4 +1,5 @@
 require('dotenv').config();
+try { require('./errlog-console'); } catch (_) {}   // C4: console.error/warn -> errlog
 const express = require('express');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
