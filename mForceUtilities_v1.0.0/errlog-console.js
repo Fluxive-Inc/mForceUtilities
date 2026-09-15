@@ -1,6 +1,6 @@
 // ⚠ VENDORED — DO NOT EDIT HERE.
 // Source of truth: .mforce/lib/errlog-console/errlog-console.js   ·   change it there, then run ./sync-modules.sh
-// Synced: 2026-09-14T01:47:30Z
+// Synced: 2026-09-15T10:37:36Z
 'use strict';
 /**
  * errlog-console.js — forward console.error/console.warn to the central errlog
@@ -23,8 +23,18 @@ try {
     try {
       const message = args.map((a) => { try { return typeof a === 'string' ? a : JSON.stringify(a); } catch (_) { return String(a); } }).join(' ').slice(0, 2000);
       if (typeof fetch === 'function') {
+        // FLT-SAY-6 — this `.catch(() => {})` is CORRECT and stays; what was missing is
+        // the sentence saying so. Reporting a failed error-report goes through
+        // console.error, which is the function this shim has just wrapped: the report
+        // fails again, forwards again, and the loop only ends when the rate limiter
+        // above cuts it off. So the one place a dropped rejection is the right answer
+        // is here. The convention this fleet uses (say-the-specific-thing.md, and the
+        // audit in _scripts/audit-swallowed-errors.sh) is that deliberate suppression
+        // SAYS WHY, INLINE — otherwise a careful line is indistinguishable from a
+        // careless one and the audit's count means nothing.
         fetch(URL, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ system: SYSTEM, level, message, ts: new Date().toISOString() }) }).catch(() => {});
+          body: JSON.stringify({ system: SYSTEM, level, message, ts: new Date().toISOString() }) })
+          .catch(() => {});   // deliberate: see above — reporting this would recurse
       }
     } catch (_) { /* diagnostics must never break the app */ }
   }
