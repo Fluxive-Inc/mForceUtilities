@@ -50,7 +50,7 @@ class DashboardScreen extends ConsumerWidget {
                 subtitle: Text(item.value),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
-                  onTap: () {
+                  onPressed: () {
                     if (item.id != null) ref.read(configsProvider.notifier).delete(item.id!);
                   },
                 ),
